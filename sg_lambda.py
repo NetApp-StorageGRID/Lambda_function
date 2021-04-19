@@ -1,13 +1,10 @@
-rom __future__ import print_function
+from __future__ import print_function
 
-import json
-import ast
-import os
-import uuid
 import boto3
 import logging
+import ast
 import glob
-import datetime
+import uuid
 import random
 from urllib.parse import urlparse
 
@@ -17,7 +14,6 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 def lambda_handler(event, context):
-    #print("Received event: " + json.dumps(event, indent=2))
     sgObj = event['Records'][0]['Sns']['Message']
     message = ast.literal_eval(sgObj)
     
@@ -25,3 +21,7 @@ def lambda_handler(event, context):
     sourceS3Bucket = message['Records'][0]['s3']['bucket']['name']
     sourceS3Key = message['Records'][0]['s3']['object']['key']
     sourceS3 =  ENDPOINT + '/'+ sourceS3Bucket + '/' + sourceS3Key #build a pre-signed URL in production
+    
+    logger.info("Source S3 Bucket : %s", sourceS3Bucket)
+    logger.info("Source S3 Key : %s", sourceS3Key)
+    logger.info("S3 Object Source : %s", sourceS3)
